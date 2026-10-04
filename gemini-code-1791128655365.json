@@ -1,0 +1,16 @@
+{
+  "name": "Golf Fit Pro",
+  "short_name": "GolfFit",
+  "description": "Rutinas de calentamiento y movilidad para golf",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#4CAF50",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2955/2955776.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

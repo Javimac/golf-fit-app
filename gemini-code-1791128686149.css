@@ -1,0 +1,102 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 450px; /* Tamaño móvil */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #4CAF50; /* Verde Golf */
+    margin-bottom: 20px;
+}
+
+.video-container {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background-color: #2a2a2a;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.placeholder-box {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.timer-display {
+    text-align: center;
+    flex-grow: 1;
+}
+
+#exercise-name {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+#time-left {
+    font-size: 5rem;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums; /* Evita que los números bailen */
+    margin: 10px 0;
+    transition: color 0.3s ease;
+}
+
+.next-text {
+    color: #aaa;
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.control-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 20px 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+    min-height: 64px; /* Hitbox grande */
+}
+
+.play-btn {
+    background-color: #4CAF50;
+    flex: 2; /* Botón de play más grande */
+}
+
+.control-btn:active {
+    opacity: 0.8;
+}
+
+/* Clases dinámicas añadidas por JS */
+.warning-time {
+    color: #ff9800 !important; /* Naranja para los últimos 3 segundos */
+}

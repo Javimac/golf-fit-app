@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Golf Fit PWA</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Enlace al manifest para que se pueda instalar como App -->
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1 id="workout-title">Calentamiento Tee del 1</h1>
+        </header>
+        
+        <main class="workout-view">
+            <!-- Contenedor del Vídeo -->
+            <div class="video-container">
+                <!-- Aquí irá la etiqueta: <video src="..." autoplay loop muted playsinline></video> -->
+                <div id="video-placeholder" class="placeholder-box">
+                    <span id="video-name">Preparado para empezar</span>
+                </div>
+            </div>
+
+            <!-- Zona de Cronómetro -->
+            <div class="timer-display">
+                <h2 id="exercise-name">Toca Empezar</h2>
+                <div id="time-left">00:00</div>
+                <p id="next-exercise" class="next-text">Siguiente: Movilidad Torácica</p>
+            </div>
+
+            <!-- Controles (Botones grandes) -->
+            <div class="controls">
+                <button id="btn-prev" class="control-btn">Pista Ant.</button>
+                <button id="btn-play-pause" class="control-btn play-btn">Empezar</button>
+                <button id="btn-next" class="control-btn">Siguiente</button>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
