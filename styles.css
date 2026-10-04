@@ -36,7 +36,6 @@ header h1 { font-size: 1.4rem; color: #fff; flex-grow: 1; text-align: center; }
 .secondary-btn { background-color: #333; color: white; border: 1px solid #555; border-radius: 8px; padding: 8px 12px; font-size: 0.9rem; cursor: pointer; }
 .selection-list { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; padding-right: 5px; }
 
-/* Checkbox gigante de Fricción Cero */
 .selection-item { background-color: #2a2a2a; border-radius: 12px; padding: 15px; display: flex; align-items: flex-start; gap: 15px; cursor: pointer; }
 .selection-item input[type="checkbox"] { width: 28px; height: 28px; accent-color: #4CAF50; flex-shrink: 0; margin-top: 2px; }
 .item-info h3 { font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
