@@ -1,3 +1,4 @@
+// --- 1. BASE DE DATOS DE RUTINAS (20 Ejercicios Biomecánicos con Tiempos y Descripciones) ---
 const rutinas = {
     calentamiento: [
         { nombre: "Rotaciones Torácicas", duracion: 45, youtubeId: "uGl-AG4C1Wc", descripcion: "Calentamiento rápido de la zona media para evitar tirones en el Tee 1." },
@@ -26,3 +27,299 @@ const rutinas = {
         { nombre: "Activación de Muñecas", duracion: 45, youtubeId: "jJEPWV6d7x8", descripcion: "Previene epicondilitis (codo de golfista) y mejora la fluidez del release al cruzar las manos." }
     ]
 };
+
+let rutinaActiva = [];
+let currentIndex = 0;
+let timeLeft = 0;
+let isPlaying = false;
+let timerInterval = null;
+
+// --- 2. SISTEMA DE NAVEGACIÓN ---
+function showView(viewId) {
+    document.querySelectorAll('.view').forEach(view => {
+        view.classList.remove('active');
+        view.classList.add('hidden');
+    });
+    const target = document.getElementById(viewId);
+    if(target) {
+        target.classList.remove('hidden');
+        target.classList.add('active');
+    }
+
+    if(viewId !== 'workout-view' && isPlaying) pauseTimer();
+    if(viewId !== 'metronome-view' && isMetroPlaying) stopMetronome();
+}
+
+setTimeout(() => { showView('menu-view'); }, 2000); 
+
+// --- 3. LÓGICA DE MENÚ Y SELECCIÓN ---
+document.getElementById('btn-menu-warmup').addEventListener('click', () => {
+    rutinaActiva = rutinas.calentamiento;
+    document.getElementById('workout-title').textContent = "Calentamiento Corto";
+    iniciarRutina();
+});
+
+document.getElementById('btn-menu-mobility').addEventListener('click', () => {
+    construirListaSeleccion();
+    showView('selection-view');
+});
+
+document.getElementById('btn-menu-metronome').addEventListener('click', () => {
+    showView('metronome-view');
+});
+
+function construirListaSeleccion() {
+    const listContainer = document.getElementById('selection-list');
+    listContainer.innerHTML = '';
+    
+    rutinas.movilidad.forEach((ej, index) => {
+        const item = document.createElement('label');
+        item.className = 'selection-item';
+        item.innerHTML = `
+            <input type="checkbox" class="chk-ejercicio" value="${index}" checked>
+            <div class="item-info">
+                <h3>${ej.nombre} (${ej.duracion}s)</h3>
+                <p>${ej.descripcion}</p>
+            </div>
+        `;
+        item.querySelector('input').addEventListener('change', calcularTiempoTotal);
+        listContainer.appendChild(item);
+    });
+    calcularTiempoTotal();
+}
+
+function calcularTiempoTotal() {
+    const checkboxes = document.querySelectorAll('.chk-ejercicio');
+    let totalSegundos = 0;
+    checkboxes.forEach(chk => {
+        if (chk.checked) totalSegundos += rutinas.movilidad[chk.value].duracion;
+    });
+    
+    const min = Math.floor(totalSegundos / 60);
+    const seg = totalSegundos % 60;
+    document.getElementById('time-calc').textContent = `${min}m ${seg}s`;
+}
+
+document.getElementById('btn-select-all').addEventListener('click', (e) => {
+    const checkboxes = document.querySelectorAll('.chk-ejercicio');
+    const allChecked = Array.from(checkboxes).every(c => c.checked);
+    checkboxes.forEach(c => c.checked = !allChecked);
+    e.target.textContent = allChecked ? "Seleccionar Todos" : "Deseleccionar Todos";
+    calcularTiempoTotal();
+});
+
+document.getElementById('btn-start-selected').addEventListener('click', () => {
+    const checkboxes = document.querySelectorAll('.chk-ejercicio:checked');
+    if (checkboxes.length === 0) {
+        alert("Por favor, selecciona al menos un ejercicio.");
+        return;
+    }
+    rutinaActiva = Array.from(checkboxes).map(chk => rutinas.movilidad[chk.value]);
+    document.getElementById('workout-title').textContent = "Movilidad Custom";
+    iniciarRutina();
+});
+
+function iniciarRutina() {
+    currentIndex = 0;
+    timeLeft = rutinaActiva[0].duracion;
+    pauseTimer();
+    updateUI();
+    showView('workout-view');
+}
+
+// --- 4. LÓGICA DE ENTRENAMIENTO ---
+const elExerciseName = document.getElementById('exercise-name');
+const elExerciseDesc = document.getElementById('exercise-desc');
+const elTimeLeft = document.getElementById('time-left');
+const elNextExercise = document.getElementById('next-exercise');
+const btnPlayPause = document.getElementById('btn-play-pause');
+
+const elYoutubeContainer = document.getElementById('youtube-container');
+const elYoutubePlayer = document.getElementById('youtube-player');
+const elPlaceholder = document.getElementById('video-placeholder');
+
+function formatTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
+function updateUI() {
+    const currentTask = rutinaActiva[currentIndex];
+    elExerciseName.textContent = currentTask.nombre;
+    elExerciseDesc.textContent = currentTask.descripcion || ""; 
+    elTimeLeft.textContent = formatTime(timeLeft);
+    
+    if (timeLeft <= 3 && timeLeft > 0) elTimeLeft.classList.add('warning-time');
+    else elTimeLeft.classList.remove('warning-time');
+
+    const nextTask = rutinaActiva[currentIndex + 1];
+    elNextExercise.textContent = nextTask ? `Siguiente: ${nextTask.nombre}` : "¡Último ejercicio!";
+
+    if (isPlaying || currentIndex > 0) {
+        elPlaceholder.classList.add('hidden');
+        elYoutubeContainer.classList.remove('hidden');
+        
+        const ytUrl = `https://www.youtube.com/embed/${currentTask.youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${currentTask.youtubeId}&playsinline=1`;
+        if (elYoutubePlayer.src !== ytUrl) elYoutubePlayer.src = ytUrl;
+    } else {
+        elPlaceholder.classList.remove('hidden');
+        elYoutubeContainer.classList.add('hidden');
+        document.getElementById('video-name').textContent = "Pulsa Empezar";
+        elYoutubePlayer.src = "";
+    }
+}
+
+function tick() {
+    if (timeLeft > 0) { 
+        timeLeft--; 
+        updateUI(); 
+    } else { 
+        nextExercise(); 
+    }
+}
+
+function nextExercise() {
+    if (currentIndex < rutinaActiva.length - 1) {
+        currentIndex++; 
+        timeLeft = rutinaActiva[currentIndex].duracion; 
+        updateUI();
+    } else {
+        pauseTimer(); 
+        elExerciseName.textContent = "¡Completado!"; 
+        elExerciseDesc.textContent = "Gran trabajo. Estás listo para el campo.";
+        elTimeLeft.textContent = "00:00"; 
+        btnPlayPause.textContent = "Volver al Menú";
+        elYoutubeContainer.classList.add('hidden');
+        elPlaceholder.classList.remove('hidden');
+        document.getElementById('video-name').textContent = "Rutina finalizada";
+    }
+}
+
+function playTimer() {
+    isPlaying = true; 
+    btnPlayPause.textContent = "Pausar"; 
+    btnPlayPause.style.backgroundColor = "#ff9800";
+    timerInterval = setInterval(tick, 1000);
+    updateUI(); 
+}
+
+function pauseTimer() {
+    isPlaying = false; 
+    btnPlayPause.textContent = "Empezar"; 
+    btnPlayPause.style.backgroundColor = "#4CAF50";
+    clearInterval(timerInterval);
+}
+
+btnPlayPause.addEventListener('click', () => {
+    if (elExerciseName.textContent === "¡Completado!") {
+        showView('menu-view');
+        return;
+    }
+    isPlaying ? pauseTimer() : playTimer();
+});
+
+document.getElementById('btn-next').addEventListener('click', () => {
+    if (currentIndex < rutinaActiva.length - 1) {
+        currentIndex++;
+        timeLeft = rutinaActiva[currentIndex].duracion;
+        updateUI();
+    }
+});
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+    if (currentIndex > 0) { 
+        currentIndex--; 
+        timeLeft = rutinaActiva[currentIndex].duracion; 
+        updateUI(); 
+    }
+});
+
+// --- 5. LÓGICA DEL METRÓNOMO ---
+let audioContext = null;
+let metroInterval = null;
+let isMetroPlaying = false;
+let currentBpm = 80;
+
+const elBpmDisplay = document.getElementById('bpm-display');
+const sliderBpm = document.getElementById('bpm-slider');
+const btnMetroPlay = document.getElementById('btn-metro-play');
+const elPendulum = document.getElementById('pendulum');
+
+function updateMetronomeSpeed() {
+    const durationMs = 60000 / currentBpm; 
+    document.documentElement.style.setProperty('--bpm-duration', `${durationMs}ms`);
+}
+updateMetronomeSpeed();
+
+sliderBpm.addEventListener('input', (e) => {
+    currentBpm = e.target.value;
+    elBpmDisplay.textContent = currentBpm;
+    updateMetronomeSpeed();
+    if(isMetroPlaying) { stopMetronome(); startMetronome(); }
+});
+
+function playClick() {
+    try {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+        
+        osc.type = "square";
+        osc.frequency.setValueAtTime(880, audioContext.currentTime);
+        
+        gain.gain.setValueAtTime(0.5, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.08);
+        
+        osc.start(audioContext.currentTime);
+        osc.stop(audioContext.currentTime + 0.08);
+    } catch (e) {
+        console.log("Error de audio:", e);
+    }
+}
+
+function startMetronome() {
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    
+    if (audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+            ejecutarInicioMetronomo();
+        });
+    } else {
+        ejecutarInicioMetronomo();
+    }
+}
+
+function ejecutarInicioMetronomo() {
+    isMetroPlaying = true;
+    btnMetroPlay.textContent = "Detener Metrónomo";
+    btnMetroPlay.style.backgroundColor = "#f44336"; 
+    
+    elPendulum.classList.add('metro-anim');
+    playClick(); 
+    const intervalMs = 60000 / currentBpm;
+    metroInterval = setInterval(playClick, intervalMs);
+}
+
+function stopMetronome() {
+    isMetroPlaying = false;
+    btnMetroPlay.textContent = "Iniciar Metrónomo";
+    btnMetroPlay.style.backgroundColor = "#4CAF50";
+    clearInterval(metroInterval);
+    elPendulum.classList.remove('metro-anim');
+}
+
+btnMetroPlay.addEventListener('click', () => {
+    isMetroPlaying ? stopMetronome() : startMetronome();
+});
