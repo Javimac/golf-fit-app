@@ -1,4 +1,24 @@
-// --- 1. SISTEMA DE NAVEGACIÓN ---
+// --- 1. BASE DE DATOS DE RUTINAS ---
+const rutinas = {
+    calentamiento: [
+        { nombre: "Movilidad Torácica", duracion: 60, video: "thoracic.mp4" },
+        { nombre: "Círculos de Cadera", duracion: 60, video: "hip.mp4" },
+        { nombre: "Rotaciones con Palo", duracion: 60, video: "stick.mp4" }
+    ],
+    movilidad: [
+        { nombre: "Gato-Camello", duracion: 60, video: "cat_camel.mp4" },
+        { nombre: "Apertura Psoas-Ilíaco", duracion: 90, video: "psoas.mp4" },
+        { nombre: "Rotación Tumbado (Libro)", duracion: 90, video: "book_stretch.mp4" }
+    ]
+};
+
+let rutinaActiva = rutinas.calentamiento; // Por defecto
+let currentIndex = 0;
+let timeLeft = 0;
+let isPlaying = false;
+let timerInterval = null;
+
+// --- 2. SISTEMA DE NAVEGACIÓN ---
 function showView(viewId) {
     document.querySelectorAll('.view').forEach(view => {
         view.classList.remove('active');
@@ -7,37 +27,27 @@ function showView(viewId) {
     document.getElementById(viewId).classList.remove('hidden');
     document.getElementById(viewId).classList.add('active');
 
-    // Pausar cosas al salir de la pantalla
     if(viewId !== 'workout-view' && isPlaying) pauseTimer();
     if(viewId !== 'metronome-view' && isMetroPlaying) stopMetronome();
 }
 
-// Ocultar Splash Screen tras 2 segundos
-setTimeout(() => {
-    showView('menu-view');
-}, 2000);
+setTimeout(() => { showView('menu-view'); }, 2000); // Splash screen
 
-// Botones del menú
-document.getElementById('btn-menu-warmup').addEventListener('click', () => {
+function cargarRutina(tipo, titulo) {
+    rutinaActiva = rutinas[tipo];
+    document.getElementById('workout-title').textContent = titulo;
+    currentIndex = 0;
+    timeLeft = rutinaActiva[0].duracion;
+    pauseTimer();
+    updateUI();
     showView('workout-view');
-    updateUI(); // Refresca la vista de entrenamiento
-});
-document.getElementById('btn-menu-metronome').addEventListener('click', () => {
-    showView('metronome-view');
-});
+}
 
-// --- 2. LÓGICA DE ENTRENAMIENTO (Mantenida) ---
-const workout = [
-    { nombre: "Movilidad Torácica", duracion: 60, video: "thoracic.mp4" },
-    { nombre: "Círculos de Cadera", duracion: 60, video: "hip.mp4" },
-    { nombre: "Rotaciones Palo", duracion: 60, video: "stick.mp4" }
-];
+document.getElementById('btn-menu-warmup').addEventListener('click', () => cargarRutina('calentamiento', 'Calentamiento (Tee del 1)'));
+document.getElementById('btn-menu-mobility').addEventListener('click', () => cargarRutina('movilidad', 'Movilidad y Estiramientos'));
+document.getElementById('btn-menu-metronome').addEventListener('click', () => showView('metronome-view'));
 
-let currentIndex = 0;
-let timeLeft = workout[0].duracion;
-let isPlaying = false;
-let timerInterval = null;
-
+// --- 3. LÓGICA DE ENTRENAMIENTO ---
 const elExerciseName = document.getElementById('exercise-name');
 const elTimeLeft = document.getElementById('time-left');
 const elNextExercise = document.getElementById('next-exercise');
@@ -50,14 +60,14 @@ function formatTime(seconds) {
 }
 
 function updateUI() {
-    const currentTask = workout[currentIndex];
+    const currentTask = rutinaActiva[currentIndex];
     elExerciseName.textContent = currentTask.nombre;
     elTimeLeft.textContent = formatTime(timeLeft);
     
     if (timeLeft <= 3 && timeLeft > 0) elTimeLeft.classList.add('warning-time');
     else elTimeLeft.classList.remove('warning-time');
 
-    const nextTask = workout[currentIndex + 1];
+    const nextTask = rutinaActiva[currentIndex + 1];
     elNextExercise.textContent = nextTask ? `Siguiente: ${nextTask.nombre}` : "¡Último ejercicio!";
 }
 
@@ -67,8 +77,8 @@ function tick() {
 }
 
 function nextExercise() {
-    if (currentIndex < workout.length - 1) {
-        currentIndex++; timeLeft = workout[currentIndex].duracion; updateUI();
+    if (currentIndex < rutinaActiva.length - 1) {
+        currentIndex++; timeLeft = rutinaActiva[currentIndex].duracion; updateUI();
     } else {
         pauseTimer(); elExerciseName.textContent = "¡Completado!"; elTimeLeft.textContent = "00:00"; btnPlayPause.textContent = "Reiniciar";
     }
@@ -80,22 +90,23 @@ function playTimer() {
 }
 
 function pauseTimer() {
-    isPlaying = false; btnPlayPause.textContent = "Reanudar"; btnPlayPause.style.backgroundColor = "#4CAF50";
+    isPlaying = false; btnPlayPause.textContent = "Empezar"; btnPlayPause.style.backgroundColor = "#4CAF50";
     clearInterval(timerInterval);
 }
 
 btnPlayPause.addEventListener('click', () => {
     if (elExerciseName.textContent === "¡Completado!") {
-        currentIndex = 0; timeLeft = workout[0].duracion; updateUI();
+        currentIndex = 0; timeLeft = rutinaActiva[0].duracion; updateUI();
     }
     isPlaying ? pauseTimer() : playTimer();
 });
 document.getElementById('btn-next').addEventListener('click', nextExercise);
 document.getElementById('btn-prev').addEventListener('click', () => {
-    if (currentIndex > 0) { currentIndex--; timeLeft = workout[currentIndex].duracion; updateUI(); }
+    if (currentIndex > 0) { currentIndex--; timeLeft = rutinaActiva[currentIndex].duracion; updateUI(); }
 });
 
-// --- 3. LÓGICA DEL METRÓNOMO ---
+
+// --- 4. LÓGICA DEL METRÓNOMO (Motor de Audio Corregido) ---
 let audioContext = null;
 let metroInterval = null;
 let isMetroPlaying = false;
@@ -110,38 +121,45 @@ sliderBpm.addEventListener('input', (e) => {
     elBpmDisplay.textContent = currentBpm;
     if(isMetroPlaying) {
         stopMetronome();
-        startMetronome(); // Reinicia con el nuevo ritmo
+        startMetronome(); 
     }
 });
 
-// Usamos la API de Audio nativa para pitidos exactos sin retraso
+// Función de sonido percusiva y compatible con iOS
 function playClick() {
-    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    if (!audioContext) return;
     const osc = audioContext.createOscillator();
     const gain = audioContext.createGain();
     
     osc.connect(gain);
     gain.connect(audioContext.destination);
     
-    osc.frequency.value = 800; // Tono agudo
-    osc.type = "sine";
+    // Usar onda cuadrada suena más fuerte y parecido a un "clic" mecánico
+    osc.type = "square";
+    osc.frequency.setValueAtTime(800, audioContext.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05); // Caída rápida de frecuencia
     
     gain.gain.setValueAtTime(1, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1); // Pitido muy corto y seco
+    gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05); // Caída rápida de volumen
     
     osc.start(audioContext.currentTime);
-    osc.stop(audioContext.currentTime + 0.1);
+    osc.stop(audioContext.currentTime + 0.05);
 }
 
 function startMetronome() {
-    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioContext.state === 'suspended') audioContext.resume(); // Requisito de navegadores móviles
+    // Desbloqueo forzado del AudioContext en móviles al pulsar el botón
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
     
     isMetroPlaying = true;
     btnMetroPlay.textContent = "Detener Metrónomo";
-    btnMetroPlay.style.backgroundColor = "#f44336"; // Rojo para parar
+    btnMetroPlay.style.backgroundColor = "#f44336"; 
     
-    playClick(); // Primer pitido inmediato
+    playClick(); 
     const intervalMs = 60000 / currentBpm;
     metroInterval = setInterval(playClick, intervalMs);
 }
