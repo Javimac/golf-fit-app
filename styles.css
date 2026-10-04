@@ -1,3 +1,8 @@
+:root {
+    /* Esta variable cambiará desde JavaScript según los BPM */
+    --bpm-duration: 0.75s;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -33,13 +38,8 @@ body {
     animation: fadeIn 0.3s ease;
 }
 
-.view.active {
-    display: flex;
-}
-
-.hidden {
-    display: none !important;
-}
+.view.active { display: flex; }
+.hidden { display: none !important; }
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -47,11 +47,7 @@ body {
 }
 
 /* --- SPLASH SCREEN --- */
-#splash-view {
-    justify-content: center;
-    align-items: center;
-    background-color: #1a1a1a;
-}
+#splash-view { justify-content: center; align-items: center; background-color: #1a1a1a; }
 .logo-text { font-size: 3rem; color: #4CAF50; margin-bottom: 10px; }
 .tagline { color: #888; font-size: 1.2rem; margin-bottom: 30px; }
 .loader { border: 4px solid #333; border-top: 4px solid #4CAF50; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
@@ -96,34 +92,19 @@ header h1 { font-size: 1.4rem; color: #fff; flex-grow: 1; text-align: center; }
 .control-btn:active { opacity: 0.8; }
 .warning-time { color: #ff9800 !important; }
 
-/* --- ANIMACIONES CSS (Sustituto de Vídeo) --- */
-#css-animator {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* --- METRÓNOMO VISUAL --- */
+.metronome-display { text-align: center; margin-top: 10px; margin-bottom: 20px; flex-shrink: 0; }
+.metronome-visual { width: 100%; height: 120px; display: flex; justify-content: center; margin-bottom: 15px; }
+.metro-svg { height: 100%; width: auto; overflow: visible; }
+#pendulum { transform-origin: 50px 80px; }
+.metro-anim { animation: swingMetronome var(--bpm-duration) ease-in-out infinite alternate; }
+
+@keyframes swingMetronome {
+    0% { transform: rotate(-40deg); }
+    100% { transform: rotate(40deg); }
 }
 
-.stickman-svg {
-    width: 120px;
-    height: 120px;
-    overflow: visible;
-}
-
-.anim-rotation {
-    transform-origin: 50px 35px;
-    animation: swingRotate 2s ease-in-out infinite alternate;
-}
-
-@keyframes swingRotate {
-    0% { transform: rotate(-50deg); }
-    100% { transform: rotate(50deg); }
-}
-
-/* --- METRÓNOMO --- */
-.metronome-display { text-align: center; margin-top: 20px; margin-bottom: 30px; flex-shrink: 0; }
-#bpm-display { font-size: 6rem; font-weight: bold; color: #2196F3; font-variant-numeric: tabular-nums; line-height: 1; }
-.slider-container { width: 100%; padding: 20px 0; flex-shrink: 0; }
+#bpm-display { font-size: 4.5rem; font-weight: bold; color: #2196F3; font-variant-numeric: tabular-nums; line-height: 1; }
+.slider-container { width: 100%; padding: 10px 0; flex-shrink: 0; }
 input[type=range] { width: 100%; accent-color: #2196F3; height: 8px; border-radius: 5px; outline: none; }
-.mt-extra { margin-top: 20px; margin-bottom: 20px; }
+.mt-extra { margin-top: 15px; margin-bottom: 10px; }
