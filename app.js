@@ -1,10 +1,9 @@
-// --- 1. BASE DE DATOS DE RUTINAS YOUTUBE (20 EJERCICIOS + DESCRIPCIÓN BIOMECÁNICA) ---
+// --- 1. BASE DE DATOS DE RUTINAS YOUTUBE (20 EJERCICIOS + DESCRIPCIÓN) ---
 const rutinas = {
     calentamiento: [
         { nombre: "Rotaciones Torácicas", duracion: 60, youtubeId: "uGl-AG4C1Wc", descripcion: "Calentamiento rápido de la zona media para evitar tirones en el Tee 1." },
         { nombre: "Rotaciones con Palo", duracion: 60, youtubeId: "Y8Xy891KIfE", descripcion: "Conecta los brazos con el tronco simulando la resistencia del swing." }
     ],
-    // 20 Mejores Ejercicios de Movilidad Biomecánica para Golf
     movilidad: [
         { nombre: "Gato-Camello", duracion: 60, youtubeId: "CE_5RWjFA3Q", descripcion: "Flexibiliza la columna vertebral y el control pélvico. Vital para mantener tus ángulos (posture angle) intactos en el impacto." },
         { nombre: "90/90 de Cadera", duracion: 60, youtubeId: "t4Zz6-aG8Iw", descripcion: "Aumenta la rotación interna y externa de la cadera. Clave para girar completamente en el backswing sin forzar la espalda baja." },
@@ -120,7 +119,7 @@ function iniciarRutina() {
     showView('workout-view');
 }
 
-// --- 4. LÓGICA DE ENTRENAMIENTO (CON YOUTUBE INCRUSTADO Y TEXTOS) ---
+// --- 4. LÓGICA DE ENTRENAMIENTO ---
 const elExerciseName = document.getElementById('exercise-name');
 const elExerciseDesc = document.getElementById('exercise-desc');
 const elTimeLeft = document.getElementById('time-left');
@@ -140,7 +139,7 @@ function formatTime(seconds) {
 function updateUI() {
     const currentTask = rutinaActiva[currentIndex];
     elExerciseName.textContent = currentTask.nombre;
-    elExerciseDesc.textContent = currentTask.descripcion || ""; // Inyecta la justificación
+    elExerciseDesc.textContent = currentTask.descripcion || ""; 
     elTimeLeft.textContent = formatTime(timeLeft);
     
     if (timeLeft <= 3 && timeLeft > 0) elTimeLeft.classList.add('warning-time');
