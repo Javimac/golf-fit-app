@@ -5,38 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Golf Fit PWA</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Enlace al manifest para que se pueda instalar como App -->
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div class="app-container">
-        <header>
-            <h1 id="workout-title">Calentamiento Tee del 1</h1>
-        </header>
         
-        <main class="workout-view">
-            <!-- Contenedor del Vídeo -->
+        <!-- PANTALLA SPLASH -->
+        <section id="splash-view" class="view active">
+            <div class="splash-content">
+                <h1 class="logo-text">Golf Fit</h1>
+                <p class="tagline">Mejora tu swing</p>
+                <div class="loader"></div>
+            </div>
+        </section>
+
+        <!-- MENÚ PRINCIPAL -->
+        <section id="menu-view" class="view hidden">
+            <header>
+                <h1>Menú Principal</h1>
+            </header>
+            <div class="menu-grid">
+                <button id="btn-menu-warmup" class="menu-card">
+                    <h2>Calentamiento</h2>
+                    <p>Tee del 1 (10 min)</p>
+                </button>
+                <button id="btn-menu-training" class="menu-card disabled">
+                    <h2>Entrenamiento</h2>
+                    <p>Fuerza y Core (Próximamente)</p>
+                </button>
+                <button id="btn-menu-metronome" class="menu-card metronome-card">
+                    <h2>Metrónomo</h2>
+                    <p>Práctica de Putter</p>
+                </button>
+            </div>
+        </section>
+
+        <!-- PANTALLA ENTRENAMIENTO (La que ya tenías) -->
+        <section id="workout-view" class="view hidden">
+            <header class="nav-header">
+                <button class="back-btn" onclick="showView('menu-view')">⬅ Volver</button>
+                <h1 id="workout-title">Calentamiento</h1>
+            </header>
+            
             <div class="video-container">
-                <!-- Aquí irá la etiqueta: <video src="..." autoplay loop muted playsinline></video> -->
                 <div id="video-placeholder" class="placeholder-box">
-                    <span id="video-name">Preparado para empezar</span>
+                    <span id="video-name">Preparado</span>
                 </div>
             </div>
 
-            <!-- Zona de Cronómetro -->
             <div class="timer-display">
                 <h2 id="exercise-name">Toca Empezar</h2>
                 <div id="time-left">00:00</div>
                 <p id="next-exercise" class="next-text">Siguiente: Movilidad Torácica</p>
             </div>
 
-            <!-- Controles (Botones grandes) -->
             <div class="controls">
-                <button id="btn-prev" class="control-btn">Pista Ant.</button>
+                <button id="btn-prev" class="control-btn">Ant.</button>
                 <button id="btn-play-pause" class="control-btn play-btn">Empezar</button>
-                <button id="btn-next" class="control-btn">Siguiente</button>
+                <button id="btn-next" class="control-btn">Sig.</button>
             </div>
-        </main>
+        </section>
+
+        <!-- PANTALLA METRÓNOMO -->
+        <section id="metronome-view" class="view hidden">
+            <header class="nav-header">
+                <button class="back-btn" onclick="showView('menu-view')">⬅ Volver</button>
+                <h1>Metrónomo Putter</h1>
+            </header>
+            
+            <div class="metronome-display">
+                <div id="bpm-display">80</div>
+                <p>BPM (Beats per minute)</p>
+            </div>
+
+            <div class="slider-container">
+                <input type="range" id="bpm-slider" min="40" max="120" value="80">
+            </div>
+
+            <div class="controls mt-extra">
+                <button id="btn-metro-play" class="control-btn play-btn">Iniciar Metrónomo</button>
+            </div>
+        </section>
+
     </div>
     <script src="app.js"></script>
 </body>
