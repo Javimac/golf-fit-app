@@ -10,8 +10,8 @@ body {
     color: #ffffff;
     display: flex;
     justify-content: center;
-    height: 100vh;
-    overflow: hidden; /* Evita scroll accidental */
+    height: 100dvh; /* Se adapta dinámicamente al tamaño real del móvil */
+    overflow: hidden; /* Mantiene la app fija como una app nativa */
 }
 
 .app-container {
@@ -28,11 +28,15 @@ body {
     display: none;
     flex-direction: column;
     height: 100%;
+    overflow-y: auto; /* Permite hacer scroll vertical si el contenido no cabe */
+    padding-bottom: 20px; /* Margen de seguridad abajo */
     animation: fadeIn 0.3s ease;
 }
+
 .view.active {
     display: flex;
 }
+
 .hidden {
     display: none !important;
 }
@@ -54,31 +58,47 @@ body {
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* --- NAVEGACIÓN Y MENÚ --- */
-.nav-header { display: flex; align-items: center; margin-bottom: 20px; gap: 15px; }
+.nav-header { display: flex; align-items: center; margin-bottom: 20px; gap: 15px; flex-shrink: 0; }
 .back-btn { background: none; border: none; color: #4CAF50; font-size: 1rem; font-weight: bold; cursor: pointer; padding: 10px 0; }
 header h1 { font-size: 1.4rem; color: #fff; flex-grow: 1; text-align: center; }
 
-.menu-grid { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
-.menu-card { background-color: #2a2a2a; border: 2px solid #333; border-radius: 16px; padding: 30px 20px; text-align: left; color: white; cursor: pointer; transition: border-color 0.2s; }
+.menu-grid { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; padding-bottom: 20px; }
+.menu-card { background-color: #2a2a2a; border: 2px solid #333; border-radius: 16px; padding: 30px 20px; text-align: left; color: white; cursor: pointer; transition: border-color 0.2s; flex-shrink: 0; }
 .menu-card h2 { font-size: 1.5rem; margin-bottom: 5px; color: #4CAF50; }
 .menu-card p { color: #aaa; font-size: 1rem; }
 .menu-card.disabled { opacity: 0.5; cursor: not-allowed; }
 .menu-card.disabled h2 { color: #888; }
 .metronome-card h2 { color: #2196F3; }
 
-/* --- ENTRENAMIENTO (Mantenido y adaptado) --- */
-.video-container { width: 100%; aspect-ratio: 16/9; background-color: #2a2a2a; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; }
-.timer-display { text-align: center; flex-grow: 1; }
+/* --- ENTRENAMIENTO --- */
+.video-container { 
+    width: 100%; 
+    aspect-ratio: 16/9; 
+    max-height: 25vh; /* Evita que el vídeo sea gigante y desplace los botones */
+    background-color: #2a2a2a; 
+    border-radius: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 20px; 
+    flex-shrink: 0;
+}
+.placeholder-box { color: #888; font-size: 0.9rem; }
+
+.timer-display { text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+#exercise-name { font-size: 1.5rem; margin-bottom: 10px; }
 #time-left { font-size: 5rem; font-weight: bold; font-variant-numeric: tabular-nums; margin: 10px 0; }
-.next-text { color: #aaa; margin-bottom: 30px; }
-.controls { display: flex; justify-content: space-between; gap: 10px; }
-.control-btn { background-color: #333; color: white; border: none; border-radius: 12px; padding: 20px 10px; font-size: 1.1rem; font-weight: bold; flex: 1; min-height: 64px; }
+.next-text { color: #aaa; margin-bottom: 20px; }
+
+.controls { display: flex; justify-content: space-between; gap: 10px; flex-shrink: 0; margin-bottom: 10px; }
+.control-btn { background-color: #333; color: white; border: none; border-radius: 12px; padding: 15px 10px; font-size: 1.1rem; font-weight: bold; flex: 1; min-height: 60px; cursor: pointer; }
 .play-btn { background-color: #4CAF50; flex: 2; }
+.control-btn:active { opacity: 0.8; }
 .warning-time { color: #ff9800 !important; }
 
 /* --- METRÓNOMO --- */
-.metronome-display { text-align: center; margin-top: 40px; margin-bottom: 30px; }
+.metronome-display { text-align: center; margin-top: 20px; margin-bottom: 30px; flex-shrink: 0; }
 #bpm-display { font-size: 6rem; font-weight: bold; color: #2196F3; font-variant-numeric: tabular-nums; line-height: 1; }
-.slider-container { width: 100%; padding: 20px 0; }
-input[type=range] { width: 100%; accent-color: #2196F3; }
-.mt-extra { margin-top: auto; margin-bottom: 40px; }
+.slider-container { width: 100%; padding: 20px 0; flex-shrink: 0; }
+input[type=range] { width: 100%; accent-color: #2196F3; height: 8px; border-radius: 5px; outline: none; }
+.mt-extra { margin-top: 20px; margin-bottom: 20px; }
