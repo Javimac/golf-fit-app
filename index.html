@@ -27,11 +27,11 @@
             <div class="menu-grid">
                 <button id="btn-menu-warmup" class="menu-card">
                     <h2>Calentamiento</h2>
-                    <p>Tee del 1 (10 min)</p>
+                    <p>Tee del 1 (Corto)</p>
                 </button>
                 <button id="btn-menu-mobility" class="menu-card">
                     <h2>Movilidad</h2>
-                    <p>Rutina Completa (10 Ejercicios)</p>
+                    <p>20 Ejercicios (Personalizable)</p>
                 </button>
                 <button id="btn-menu-training" class="menu-card disabled">
                     <h2>Fuerza y Core</h2>
@@ -44,6 +44,27 @@
             </div>
         </section>
 
+        <!-- PANTALLA SELECCIÓN DE EJERCICIOS (NUEVA) -->
+        <section id="selection-view" class="view hidden">
+            <header class="nav-header">
+                <button class="back-btn" onclick="showView('menu-view')">⬅ Volver</button>
+                <h1>Elige tu Rutina</h1>
+            </header>
+            
+            <div class="selection-actions">
+                <button id="btn-select-all" class="secondary-btn">Deseleccionar Todos</button>
+            </div>
+            
+            <div id="selection-list" class="selection-list">
+                <!-- Se inyectan los 20 ejercicios desde JS -->
+            </div>
+            
+            <div class="selection-footer">
+                <div class="total-time-display">Tiempo: <span id="time-calc">00:00</span></div>
+                <button id="btn-start-selected" class="control-btn play-btn">Comenzar</button>
+            </div>
+        </section>
+
         <!-- PANTALLA ENTRENAMIENTO -->
         <section id="workout-view" class="view hidden">
             <header class="nav-header">
@@ -52,11 +73,9 @@
             </header>
             
             <div class="video-container">
-                <!-- Contenedor Integrado de YouTube -->
                 <div id="youtube-container" class="hidden" style="width: 100%; height: 100%;">
                     <iframe id="youtube-player" width="100%" height="100%" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius: 12px; pointer-events: none;"></iframe>
                 </div>
-                
                 <div id="video-placeholder" class="placeholder-box">
                     <span id="video-name">Preparado</span>
                 </div>
@@ -64,8 +83,10 @@
 
             <div class="timer-display">
                 <h2 id="exercise-name">Toca Empezar</h2>
+                <!-- Nueva etiqueta para la explicación biomecánica -->
+                <p id="exercise-desc" class="exercise-description">Beneficio del ejercicio...</p>
                 <div id="time-left">00:00</div>
-                <p id="next-exercise" class="next-text">Siguiente: Movilidad Torácica</p>
+                <p id="next-exercise" class="next-text">Siguiente: ---</p>
             </div>
 
             <div class="controls">
@@ -83,19 +104,16 @@
             </header>
             
             <div class="metronome-display">
-                <!-- Péndulo Visual SVG -->
+                <!-- Péndulo Visual SVG (MÁS GRANDE) -->
                 <div class="metronome-visual">
                     <svg viewBox="0 0 100 100" class="metro-svg">
-                        <!-- Estructura del metrónomo -->
                         <path d="M 30 90 L 70 90 L 60 10 L 40 10 Z" fill="#2a2a2a" stroke="#444" stroke-width="2"/>
                         <line x1="50" y1="80" x2="50" y2="20" stroke="#555" stroke-width="2"/>
-                        <!-- Brazo animado -->
                         <g id="pendulum">
                             <line x1="50" y1="80" x2="50" y2="15" stroke="#2196F3" stroke-width="4" stroke-linecap="round"/>
-                            <circle cx="50" cy="35" r="6" fill="#ff9800"/>
+                            <circle cx="50" cy="35" r="7" fill="#ff9800"/>
                         </g>
-                        <!-- Eje inferior -->
-                        <circle cx="50" cy="80" r="5" fill="#fff"/>
+                        <circle cx="50" cy="80" r="6" fill="#fff"/>
                     </svg>
                 </div>
                 
@@ -110,10 +128,6 @@
             <div class="controls mt-extra">
                 <button id="btn-metro-play" class="control-btn play-btn">Iniciar Metrónomo</button>
             </div>
-            
-            <p style="text-align:center; color:#888; font-size:0.8rem; margin-top:15px;">
-                *Comprueba que el móvil no esté en silencio.
-            </p>
         </section>
 
     </div>
