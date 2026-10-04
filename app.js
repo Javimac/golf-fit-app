@@ -1,14 +1,22 @@
-// --- 1. BASE DE DATOS DE RUTINAS ---
+// --- 1. BASE DE DATOS DE RUTINAS YOUTUBE ---
 const rutinas = {
     calentamiento: [
-        { nombre: "Movilidad Torácica en Cuadrupedia", duracion: 60 },
-        { nombre: "Círculos de Cadera Dinámicos", duracion: 60 },
-        { nombre: "Rotaciones con Palo", duracion: 60 }
+        { nombre: "Rotaciones Torácicas", duracion: 60, youtubeId: "uGl-AG4C1Wc" }, 
+        { nombre: "Limpiaparabrisas Cadera", duracion: 60, youtubeId: "t4Zz6-aG8Iw" },
+        { nombre: "Rotaciones con Palo", duracion: 60, youtubeId: "Y8Xy891KIfE" }
     ],
+    // Los 10 Mejores Ejercicios de Movilidad para Golf con identificadores reales
     movilidad: [
-        { nombre: "Gato-Camello", duracion: 60 },
-        { nombre: "Apertura Psoas-Ilíaco", duracion: 90 },
-        { nombre: "Rotación Tumbado (Libro)", duracion: 90 }
+        { nombre: "Leñador de Rodillas", duracion: 60, youtubeId: "AP3UoYYV2QU" },
+        { nombre: "90/90 de Cadera", duracion: 60, youtubeId: "t4Zz6-aG8Iw" },
+        { nombre: "Caminar con Manos", duracion: 60, youtubeId: "XFnK5X8hKB0" },
+        { nombre: "Rotación Torácica (Silla)", duracion: 60, youtubeId: "uGl-AG4C1Wc" },
+        { nombre: "Gato-Vaca", duracion: 60, youtubeId: "CE_5RWjFA3Q" },
+        { nombre: "El Libro Abierto", duracion: 60, youtubeId: "DmDnNGnFq2Q" },
+        { nombre: "Inclinación Pélvica", duracion: 60, youtubeId: "44D6Xc2Fkek" },
+        { nombre: "Zancadas Suaves", duracion: 60, youtubeId: "MxfTNXSfiYI" },
+        { nombre: "Hombros con Palo", duracion: 60, youtubeId: "Y8Xy891KIfE" },
+        { nombre: "Activación de Muñecas", duracion: 60, youtubeId: "jJEPWV6d7x8" }
     ]
 };
 
@@ -31,7 +39,7 @@ function showView(viewId) {
     if(viewId !== 'metronome-view' && isMetroPlaying) stopMetronome();
 }
 
-setTimeout(() => { showView('menu-view'); }, 2000); // Quitar Splash Screen
+setTimeout(() => { showView('menu-view'); }, 2000); 
 
 function cargarRutina(tipo, titulo) {
     rutinaActiva = rutinas[tipo];
@@ -43,18 +51,18 @@ function cargarRutina(tipo, titulo) {
     showView('workout-view');
 }
 
-document.getElementById('btn-menu-warmup').addEventListener('click', () => cargarRutina('calentamiento', 'Calentamiento'));
-document.getElementById('btn-menu-mobility').addEventListener('click', () => cargarRutina('movilidad', 'Movilidad'));
+document.getElementById('btn-menu-warmup').addEventListener('click', () => cargarRutina('calentamiento', 'Calentamiento Corto'));
+document.getElementById('btn-menu-mobility').addEventListener('click', () => cargarRutina('movilidad', 'Movilidad de Golf'));
 document.getElementById('btn-menu-metronome').addEventListener('click', () => showView('metronome-view'));
 
-// --- 3. LÓGICA DE ENTRENAMIENTO ---
+// --- 3. LÓGICA DE ENTRENAMIENTO (CON YOUTUBE INCRUSTADO) ---
 const elExerciseName = document.getElementById('exercise-name');
 const elTimeLeft = document.getElementById('time-left');
 const elNextExercise = document.getElementById('next-exercise');
 const btnPlayPause = document.getElementById('btn-play-pause');
 
-const elCssAnimator = document.getElementById('css-animator');
-const elAnimatedTorso = document.getElementById('animated-torso');
+const elYoutubeContainer = document.getElementById('youtube-container');
+const elYoutubePlayer = document.getElementById('youtube-player');
 const elPlaceholder = document.getElementById('video-placeholder');
 
 function formatTime(seconds) {
@@ -74,16 +82,19 @@ function updateUI() {
     const nextTask = rutinaActiva[currentIndex + 1];
     elNextExercise.textContent = nextTask ? `Siguiente: ${nextTask.nombre}` : "¡Último ejercicio!";
 
-    // Activar Animación CSS
     if (isPlaying || currentIndex > 0) {
         elPlaceholder.classList.add('hidden');
-        elCssAnimator.classList.remove('hidden');
-        elAnimatedTorso.setAttribute('class', 'anim-rotation');
+        elYoutubeContainer.classList.remove('hidden');
+        
+        // URL con autoplay silencioso en bucle
+        const ytUrl = `https://www.youtube.com/embed/${currentTask.youtubeId}?autoplay=1&mute=1&controls=0&loop=1&playlist=${currentTask.youtubeId}&playsinline=1`;
+        
+        if (elYoutubePlayer.src !== ytUrl) elYoutubePlayer.src = ytUrl;
     } else {
         elPlaceholder.classList.remove('hidden');
-        elCssAnimator.classList.add('hidden');
-        document.getElementById('video-name').textContent = "Pulsa Empezar para animar";
-        elAnimatedTorso.setAttribute('class', '');
+        elYoutubeContainer.classList.add('hidden');
+        document.getElementById('video-name').textContent = "Pulsa Empezar para cargar ejercicio";
+        elYoutubePlayer.src = "";
     }
 }
 
@@ -96,8 +107,11 @@ function nextExercise() {
     if (currentIndex < rutinaActiva.length - 1) {
         currentIndex++; timeLeft = rutinaActiva[currentIndex].duracion; updateUI();
     } else {
-        pauseTimer(); elExerciseName.textContent = "¡Completado!"; elTimeLeft.textContent = "00:00"; btnPlayPause.textContent = "Reiniciar";
-        elCssAnimator.classList.add('hidden');
+        pauseTimer(); 
+        elExerciseName.textContent = "¡Completado!"; 
+        elTimeLeft.textContent = "00:00"; 
+        btnPlayPause.textContent = "Reiniciar";
+        elYoutubeContainer.classList.add('hidden');
         elPlaceholder.classList.remove('hidden');
         document.getElementById('video-name').textContent = "Rutina finalizada";
     }
@@ -106,13 +120,12 @@ function nextExercise() {
 function playTimer() {
     isPlaying = true; btnPlayPause.textContent = "Pausar"; btnPlayPause.style.backgroundColor = "#ff9800";
     timerInterval = setInterval(tick, 1000);
-    updateUI(); // Arranca la animación
+    updateUI(); 
 }
 
 function pauseTimer() {
     isPlaying = false; btnPlayPause.textContent = "Empezar"; btnPlayPause.style.backgroundColor = "#4CAF50";
     clearInterval(timerInterval);
-    elAnimatedTorso.setAttribute('class', ''); // Pausa la animación
 }
 
 btnPlayPause.addEventListener('click', () => {
@@ -126,7 +139,7 @@ document.getElementById('btn-prev').addEventListener('click', () => {
     if (currentIndex > 0) { currentIndex--; timeLeft = rutinaActiva[currentIndex].duracion; updateUI(); }
 });
 
-// --- 4. LÓGICA DEL METRÓNOMO ---
+// --- 4. LÓGICA DEL METRÓNOMO CON PÉNDULO VISUAL ---
 let audioContext = null;
 let metroInterval = null;
 let isMetroPlaying = false;
@@ -135,10 +148,19 @@ let currentBpm = 80;
 const elBpmDisplay = document.getElementById('bpm-display');
 const sliderBpm = document.getElementById('bpm-slider');
 const btnMetroPlay = document.getElementById('btn-metro-play');
+const elPendulum = document.getElementById('pendulum');
+
+// Ajusta la velocidad de la animación en función de los BPM (CSS Variable)
+function updateMetronomeSpeed() {
+    const durationMs = 60000 / currentBpm; 
+    document.documentElement.style.setProperty('--bpm-duration', `${durationMs}ms`);
+}
+updateMetronomeSpeed(); // Llamada inicial
 
 sliderBpm.addEventListener('input', (e) => {
     currentBpm = e.target.value;
     elBpmDisplay.textContent = currentBpm;
+    updateMetronomeSpeed();
     if(isMetroPlaying) {
         stopMetronome();
         startMetronome(); 
@@ -165,16 +187,15 @@ function playClick() {
 }
 
 function startMetronome() {
-    if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioContext.state === 'suspended') {
-        audioContext.resume();
-    }
+    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioContext.state === 'suspended') audioContext.resume();
     
     isMetroPlaying = true;
     btnMetroPlay.textContent = "Detener Metrónomo";
     btnMetroPlay.style.backgroundColor = "#f44336"; 
+    
+    // Iniciar Animación
+    elPendulum.classList.add('metro-anim');
     
     playClick(); 
     const intervalMs = 60000 / currentBpm;
@@ -186,6 +207,9 @@ function stopMetronome() {
     btnMetroPlay.textContent = "Iniciar Metrónomo";
     btnMetroPlay.style.backgroundColor = "#4CAF50";
     clearInterval(metroInterval);
+    
+    // Detener Animación
+    elPendulum.classList.remove('metro-anim');
 }
 
 btnMetroPlay.addEventListener('click', () => {
