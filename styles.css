@@ -10,8 +10,8 @@ body {
     color: #ffffff;
     display: flex;
     justify-content: center;
-    height: 100dvh; /* Se adapta dinámicamente al tamaño real del móvil */
-    overflow: hidden; /* Mantiene la app fija como una app nativa */
+    height: 100dvh;
+    overflow: hidden;
 }
 
 .app-container {
@@ -28,8 +28,8 @@ body {
     display: none;
     flex-direction: column;
     height: 100%;
-    overflow-y: auto; /* Permite hacer scroll vertical si el contenido no cabe */
-    padding-bottom: 20px; /* Margen de seguridad abajo */
+    overflow-y: auto;
+    padding-bottom: 20px;
     animation: fadeIn 0.3s ease;
 }
 
@@ -74,7 +74,7 @@ header h1 { font-size: 1.4rem; color: #fff; flex-grow: 1; text-align: center; }
 .video-container { 
     width: 100%; 
     aspect-ratio: 16/9; 
-    max-height: 25vh; /* Evita que el vídeo sea gigante y desplace los botones */
+    max-height: 25vh; 
     background-color: #2a2a2a; 
     border-radius: 12px; 
     display: flex; 
@@ -95,6 +95,31 @@ header h1 { font-size: 1.4rem; color: #fff; flex-grow: 1; text-align: center; }
 .play-btn { background-color: #4CAF50; flex: 2; }
 .control-btn:active { opacity: 0.8; }
 .warning-time { color: #ff9800 !important; }
+
+/* --- ANIMACIONES CSS (Sustituto de Vídeo) --- */
+#css-animator {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stickman-svg {
+    width: 120px;
+    height: 120px;
+    overflow: visible;
+}
+
+.anim-rotation {
+    transform-origin: 50px 35px;
+    animation: swingRotate 2s ease-in-out infinite alternate;
+}
+
+@keyframes swingRotate {
+    0% { transform: rotate(-50deg); }
+    100% { transform: rotate(50deg); }
+}
 
 /* --- METRÓNOMO --- */
 .metronome-display { text-align: center; margin-top: 20px; margin-bottom: 30px; flex-shrink: 0; }
