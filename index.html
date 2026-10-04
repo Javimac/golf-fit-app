@@ -31,7 +31,7 @@
                 </button>
                 <button id="btn-menu-mobility" class="menu-card">
                     <h2>Movilidad</h2>
-                    <p>Cadera y Columna</p>
+                    <p>Rutina Completa (10 Ejercicios)</p>
                 </button>
                 <button id="btn-menu-training" class="menu-card disabled">
                     <h2>Fuerza y Core</h2>
@@ -48,27 +48,13 @@
         <section id="workout-view" class="view hidden">
             <header class="nav-header">
                 <button class="back-btn" onclick="showView('menu-view')">⬅ Volver</button>
-                <h1 id="workout-title">Calentamiento</h1>
+                <h1 id="workout-title">Rutina Activa</h1>
             </header>
             
             <div class="video-container">
-                <!-- Contenedor de la Animación CSS/SVG -->
-                <div id="css-animator" class="hidden">
-                    <svg viewBox="0 0 100 100" class="stickman-svg">
-                        <!-- Piernas estáticas -->
-                        <path d="M 35 90 L 50 55 L 65 90" stroke="#555" stroke-width="4" fill="none" stroke-linecap="round"/>
-                        <!-- Cabeza -->
-                        <circle cx="50" cy="20" r="8" fill="#4CAF50"/>
-                        <!-- Cuerpo y Brazos (Grupo Animado) -->
-                        <g id="animated-torso">
-                            <!-- Tronco -->
-                            <line x1="50" y1="28" x2="50" y2="55" stroke="#4CAF50" stroke-width="5" stroke-linecap="round"/>
-                            <!-- Brazos -->
-                            <path d="M 50 35 L 25 45 M 50 35 L 75 45" stroke="#4CAF50" stroke-width="4" fill="none" stroke-linecap="round"/>
-                            <!-- Palo de Golf Horizontal -->
-                            <line x1="10" y1="45" x2="90" y2="45" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
-                        </g>
-                    </svg>
+                <!-- Contenedor Integrado de YouTube -->
+                <div id="youtube-container" class="hidden" style="width: 100%; height: 100%;">
+                    <iframe id="youtube-player" width="100%" height="100%" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius: 12px; pointer-events: none;"></iframe>
                 </div>
                 
                 <div id="video-placeholder" class="placeholder-box">
@@ -97,6 +83,22 @@
             </header>
             
             <div class="metronome-display">
+                <!-- Péndulo Visual SVG -->
+                <div class="metronome-visual">
+                    <svg viewBox="0 0 100 100" class="metro-svg">
+                        <!-- Estructura del metrónomo -->
+                        <path d="M 30 90 L 70 90 L 60 10 L 40 10 Z" fill="#2a2a2a" stroke="#444" stroke-width="2"/>
+                        <line x1="50" y1="80" x2="50" y2="20" stroke="#555" stroke-width="2"/>
+                        <!-- Brazo animado -->
+                        <g id="pendulum">
+                            <line x1="50" y1="80" x2="50" y2="15" stroke="#2196F3" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="50" cy="35" r="6" fill="#ff9800"/>
+                        </g>
+                        <!-- Eje inferior -->
+                        <circle cx="50" cy="80" r="5" fill="#fff"/>
+                    </svg>
+                </div>
+                
                 <div id="bpm-display">80</div>
                 <p>BPM (Beats per minute)</p>
             </div>
@@ -110,7 +112,7 @@
             </div>
             
             <p style="text-align:center; color:#888; font-size:0.8rem; margin-top:15px;">
-                *Si no escuchas nada, comprueba que el móvil no esté en silencio.
+                *Comprueba que el móvil no esté en silencio.
             </p>
         </section>
 
