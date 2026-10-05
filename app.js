@@ -1,15 +1,15 @@
-// --- 1. BASE DE DATOS DE RUTINAS (IDs Estables y Verificados) ---
+// --- 1. BASE DE DATOS DE RUTINAS ---
 const rutinas = {
     calentamiento: [
-        { nombre: "Rotaciones Torácicas", duracion: 45, youtubeId: "uGl-AG4C1Wc", descripcion: "Calentamiento rápido de la zona media para evitar tirones en el Tee 1." },
-        { nombre: "Rotaciones con Palo", duracion: 45, youtubeId: "Y8Xy891KIfE", descripcion: "Conecta los brazos con el tronco simulando la resistencia del swing." }
+        { nombre: "Rotaciones Torácicas", duracion: 45, youtubeId: "3vV84Zl-f-8", descripcion: "Calentamiento rápido de la zona media para evitar tirones en el Tee 1." },
+        { nombre: "Rotaciones con Palo", duracion: 45, youtubeId: "c_l6Uv6D8J8", descripcion: "Conecta los brazos con el tronco simulando la resistencia del swing." }
     ],
     movilidad: [
-        { nombre: "Gato-Camello", duracion: 60, youtubeId: "CE_5RWjFA3Q", descripcion: "Flexibiliza la columna vertebral y el control pélvico. Vital para mantener tus ángulos intactos en el impacto." },
-        { nombre: "90/90 de Cadera", duracion: 90, youtubeId: "t4Zz6-aG8Iw", descripcion: "Aumenta la rotación interna y externa de la cadera. Clave para girar completamente en el backswing." },
-        { nombre: "El Libro Abierto", duracion: 60, youtubeId: "DmDnNGnFq2Q", descripcion: "Maximiza la movilidad torácica horizontal, previniendo el balanceo lateral (sway) indeseado." },
+        { nombre: "Gato-Camello", duracion: 60, youtubeId: "CXEclAABHj0", descripcion: "Flexibiliza la columna vertebral y el control pélvico. Vital para mantener tus ángulos intactos en el impacto." },
+        { nombre: "90/90 de Cadera", duracion: 90, youtubeId: "W7oR-Xg3qEw", descripcion: "Aumenta la rotación interna y externa de la cadera. Clave para girar completamente en el backswing." },
+        { nombre: "El Libro Abierto", duracion: 60, youtubeId: "L8_Cdb043qE", descripcion: "Maximiza la movilidad torácica horizontal, previniendo el balanceo lateral (sway) indeseado." },
         { nombre: "Puente de Glúteos (Extensión)", duracion: 45, youtubeId: "7O7T3f_f1zM", descripcion: "Potencia la extensión de cadera sin material. Fundamental para transmitir toda la fuerza en el impacto." },
-        { nombre: "Bisagra de Cadera (Hip Hinge)", duracion: 60, youtubeId: "5z8_sT3V3F8", descripcion: "Enseña a doblarse desde las caderas, cimiento de un address perfecto y sólido." },
+        { nombre: "Bisagra de Cadera (Hip Hinge)", duracion: 60, youtubeId: "w0gXZ3j9Wk8", descripcion: "Enseña a doblarse desde las caderas, cimiento de un address perfecto y sólido." },
         { nombre: "Leñador de Rodillas", duracion: 60, youtubeId: "AP3UoYYV2QU", descripcion: "Mejora la rotación del tronco contra resistencia, fortaleciendo el core en el plano oblicuo." },
         { nombre: "Caminar con Manos (Inchworm)", duracion: 60, youtubeId: "XFnK5X8hKB0", descripcion: "Estira isquiotibiales y activa los hombros. Previene la pérdida de altura al golpear la bola." },
         { nombre: "Estiramiento Psoas-Ilíaco", duracion: 90, youtubeId: "W7oR-Xg3qEw", descripcion: "Libera flexores de cadera acortados. Imprescindible para lograr una extensión completa en el finish." },
@@ -160,15 +160,14 @@ function updateUI() {
     if (isPlaying || currentIndex > 0) {
         elPlaceholder.classList.add('hidden');
         elYoutubeContainer.classList.remove('hidden');
-        elFallbackBtn.classList.remove('hidden'); // Muestra botón directo por si el embed falla
+        elFallbackBtn.classList.remove('hidden');
         
         const ytUrl = `https://www.youtube.com/embed/${currentTask.youtubeId}?autoplay=1&mute=1&controls=1&loop=1&playlist=${currentTask.youtubeId}&playsinline=1`;
         if (elYoutubePlayer.src !== ytUrl) elYoutubePlayer.src = ytUrl;
         
-        // Enlace directo al vídeo original por si YouTube bloquea la reproducción dentro de la web
         elFallbackBtn.href = `https://www.youtube.com/watch?v=${currentTask.youtubeId}`;
     } else {
-        elPlaceholder.classList.remove('hidden');
+        elPlaceholder.classList.add('hidden');
         elYoutubeContainer.classList.add('hidden');
         elFallbackBtn.classList.add('hidden');
         document.getElementById('video-name').textContent = "Pulsa Empezar";
@@ -242,16 +241,17 @@ document.getElementById('btn-prev').addEventListener('click', () => {
     }
 });
 
-// --- 5. LÓGICA DEL METRÓNOMO ---
+// --- 5. LÓGICA DEL METRÓNOMO CON TEMPOS PRO ---
 let audioContext = null;
 let metroInterval = null;
 let isMetroPlaying = false;
-let currentBpm = 80;
+let currentBpm = 76; // Por defecto el estándar pro
 
 const elBpmDisplay = document.getElementById('bpm-display');
 const sliderBpm = document.getElementById('bpm-slider');
 const btnMetroPlay = document.getElementById('btn-metro-play');
 const elPendulum = document.getElementById('pendulum');
+const proButtons = document.querySelectorAll('.pro-btn');
 
 function updateMetronomeSpeed() {
     const durationMs = 60000 / currentBpm; 
@@ -259,11 +259,39 @@ function updateMetronomeSpeed() {
 }
 updateMetronomeSpeed();
 
+function setBpm(newBpm) {
+    currentBpm = parseInt(newBpm);
+    elBpmDisplay.textContent = currentBpm;
+    sliderBpm.value = currentBpm;
+    updateMetronomeSpeed();
+
+    // Actualizar botones visuales activos
+    proButtons.forEach(btn => {
+        if(parseInt(btn.getAttribute('data-bpm')) === currentBpm) {
+            btn.classList.add('active-pro');
+        } else {
+            btn.classList.remove('active-pro');
+        }
+    });
+
+    if(isMetroPlaying) { stopMetronome(); startMetronome(); }
+}
+
 sliderBpm.addEventListener('input', (e) => {
     currentBpm = e.target.value;
     elBpmDisplay.textContent = currentBpm;
     updateMetronomeSpeed();
+    
+    // Desmarcar botones pro si se mueve manual
+    proButtons.forEach(btn => btn.classList.remove('active-pro'));
+
     if(isMetroPlaying) { stopMetronome(); startMetronome(); }
+});
+
+proButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        setBpm(e.target.getAttribute('data-bpm'));
+    });
 });
 
 function playClick() {
