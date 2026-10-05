@@ -62,15 +62,22 @@ header h1 { font-size: 1.4rem; color: #fff; flex-grow: 1; text-align: center; }
 .control-btn:active { opacity: 0.8; }
 .warning-time { color: #ff9800 !important; }
 
-/* --- METRÓNOMO VISUAL --- */
-.metronome-display { text-align: center; margin-top: 10px; margin-bottom: 20px; flex-shrink: 0; }
-.metronome-visual { width: 100%; height: 220px; display: flex; justify-content: center; margin-bottom: 15px; }
+/* --- METRÓNOMO VISUAL Y BOTONES PRO --- */
+.metronome-display { text-align: center; margin-top: 5px; margin-bottom: 10px; flex-shrink: 0; }
+.metronome-visual { width: 100%; height: 160px; display: flex; justify-content: center; margin-bottom: 10px; }
 .metro-svg { height: 100%; width: auto; overflow: visible; }
 #pendulum { transform-origin: 50px 80px; }
 .metro-anim { animation: swingMetronome var(--bpm-duration) ease-in-out infinite alternate; }
 
 @keyframes swingMetronome { 0% { transform: rotate(-40deg); } 100% { transform: rotate(40deg); } }
-#bpm-display { font-size: 4.5rem; font-weight: bold; color: #2196F3; font-variant-numeric: tabular-nums; line-height: 1; }
-.slider-container { width: 100%; padding: 10px 0; flex-shrink: 0; }
+#bpm-display { font-size: 3.5rem; font-weight: bold; color: #2196F3; font-variant-numeric: tabular-nums; line-height: 1; }
+
+.pro-tempo-container { margin-bottom: 10px; flex-shrink: 0; }
+.pro-label { font-size: 0.85rem; color: #888; margin-bottom: 6px; text-align: center; }
+.pro-buttons-grid { display: flex; gap: 8px; justify-content: center; }
+.pro-btn { background-color: #2a2a2a; border: 1px solid #444; color: #ccc; border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; cursor: pointer; flex: 1; transition: all 0.2s; }
+.pro-btn.active-pro { background-color: #2196F3; color: white; border-color: #2196F3; font-weight: bold; }
+
+.slider-container { width: 100%; padding: 5px 0; flex-shrink: 0; }
 input[type=range] { width: 100%; accent-color: #2196F3; height: 8px; border-radius: 5px; outline: none; }
-.mt-extra { margin-top: 15px; margin-bottom: 10px; }
+.mt-extra { margin-top: 10px; margin-bottom: 10px; }
