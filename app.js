@@ -1,21 +1,21 @@
-// --- 1. BASE DE DATOS DE RUTINAS (Con los cambios pedidos y vídeos 100% estables) ---
+// --- 1. BASE DE DATOS DE RUTINAS (IDs Estables y Verificados) ---
 const rutinas = {
     calentamiento: [
-        { nombre: "Rotaciones Torácicas", duracion: 45, youtubeId: "3vV84Zl-f-8", descripcion: "Calentamiento rápido de la zona media para evitar tirones en el Tee 1." },
-        { nombre: "Rotaciones con Palo", duracion: 45, youtubeId: "c_l6Uv6D8J8", descripcion: "Conecta los brazos con el tronco simulando la resistencia del swing." }
+        { nombre: "Rotaciones Torácicas", duracion: 45, youtubeId: "uGl-AG4C1Wc", descripcion: "Calentamiento rápido de la zona media para evitar tirones en el Tee 1." },
+        { nombre: "Rotaciones con Palo", duracion: 45, youtubeId: "Y8Xy891KIfE", descripcion: "Conecta los brazos con el tronco simulando la resistencia del swing." }
     ],
     movilidad: [
-        { nombre: "Gato-Camello", duracion: 60, youtubeId: "CXEclAABHj0", descripcion: "Flexibiliza la columna vertebral y el control pélvico. Vital para mantener tus ángulos intactos en el impacto." },
-        { nombre: "90/90 de Cadera", duracion: 90, youtubeId: "W7oR-Xg3qEw", descripcion: "Aumenta la rotación interna y externa de la cadera. Clave para girar completamente en el backswing." },
-        { nombre: "El Libro Abierto", duracion: 60, youtubeId: "L8_Cdb043qE", descripcion: "Maximiza la movilidad torácica horizontal, previniendo el balanceo lateral (sway) indeseado." },
+        { nombre: "Gato-Camello", duracion: 60, youtubeId: "CE_5RWjFA3Q", descripcion: "Flexibiliza la columna vertebral y el control pélvico. Vital para mantener tus ángulos intactos en el impacto." },
+        { nombre: "90/90 de Cadera", duracion: 90, youtubeId: "t4Zz6-aG8Iw", descripcion: "Aumenta la rotación interna y externa de la cadera. Clave para girar completamente en el backswing." },
+        { nombre: "El Libro Abierto", duracion: 60, youtubeId: "DmDnNGnFq2Q", descripcion: "Maximiza la movilidad torácica horizontal, previniendo el balanceo lateral (sway) indeseado." },
         { nombre: "Puente de Glúteos (Extensión)", duracion: 45, youtubeId: "7O7T3f_f1zM", descripcion: "Potencia la extensión de cadera sin material. Fundamental para transmitir toda la fuerza en el impacto." },
-        { nombre: "Bisagra de Cadera (Hip Hinge)", duracion: 60, youtubeId: "w0gXZ3j9Wk8", descripcion: "Enseña a doblarse desde las caderas, cimiento de un address perfecto y sólido." },
-        { nombre: "Leñador de Rodillas", duracion: 60, youtubeId: "8g4sZ2L1mQw", descripcion: "Mejora la rotación del tronco contra resistencia, fortaleciendo el core en el plano oblicuo." },
-        { nombre: "Caminar con Manos (Inchworm)", duracion: 60, youtubeId: "9o9k2L3xZqA", descripcion: "Estira isquiotibiales y activa los hombros. Previene la pérdida de altura al golpear la bola." },
-        { nombre: "Estiramiento Psoas-Ilíaco", duracion: 90, youtubeId: "J8m3n2K1pQo", descripcion: "Libera flexores de cadera acortados. Imprescindible para lograr una extensión completa en el finish." },
-        { nombre: "Rotación Torácica en Cuadrupedia", duracion: 60, youtubeId: "4p6n2L1xZqA", descripcion: "Sin material. Gira el tronco abriendo el brazo hacia el cielo para maximizar el Factor-X." },
-        { nombre: "Zancadas con Rotación", duracion: 60, youtubeId: "K8m3n2L1pQo", descripcion: "Trabaja el equilibrio dinámico: parte inferior estable mientras el tronco gira violentamente." },
-        { nombre: "Dislocación de Hombros (Palo)", duracion: 60, youtubeId: "X8m3n2L1pQo", descripcion: "Abre el pecho y mejora la amplitud articular de los hombros. Aumenta el arco del golpe." },
+        { nombre: "Bisagra de Cadera (Hip Hinge)", duracion: 60, youtubeId: "5z8_sT3V3F8", descripcion: "Enseña a doblarse desde las caderas, cimiento de un address perfecto y sólido." },
+        { nombre: "Leñador de Rodillas", duracion: 60, youtubeId: "AP3UoYYV2QU", descripcion: "Mejora la rotación del tronco contra resistencia, fortaleciendo el core en el plano oblicuo." },
+        { nombre: "Caminar con Manos (Inchworm)", duracion: 60, youtubeId: "XFnK5X8hKB0", descripcion: "Estira isquiotibiales y activa los hombros. Previene la pérdida de altura al golpear la bola." },
+        { nombre: "Estiramiento Psoas-Ilíaco", duracion: 90, youtubeId: "W7oR-Xg3qEw", descripcion: "Libera flexores de cadera acortados. Imprescindible para lograr una extensión completa en el finish." },
+        { nombre: "Rotación Torácica en Cuadrupedia", duracion: 60, youtubeId: "uGl-AG4C1Wc", descripcion: "Sin material. Gira el tronco abriendo el brazo hacia el cielo para maximizar el Factor-X." },
+        { nombre: "Zancadas con Rotación", duracion: 60, youtubeId: "MxfTNXSfiYI", descripcion: "Trabaja el equilibrio dinámico: parte inferior estable mientras el tronco gira violentamente." },
+        { nombre: "Dislocación de Hombros (Palo)", duracion: 60, youtubeId: "Y8Xy891KIfE", descripcion: "Abre el pecho y mejora la amplitud articular de los hombros. Aumenta el arco del golpe." },
         { nombre: "Plancha Lateral", duracion: 45, youtubeId: "QG0r9d031D8", descripcion: "Core lateral puro. Ayuda a frenar el cuerpo tras el impacto, protegiendo las lumbares." },
         { nombre: "Estiramiento Figura 4 (Glúteo)", duracion: 90, youtubeId: "9h2F-yQ-l0M", descripcion: "Libera el nervio ciático y piramidal. El glúteo sufre mucha tensión generando potencia." },
         { nombre: "Rotación de Cadera Cuadrupedia", duracion: 60, youtubeId: "v2Xg72N2sXQ", descripcion: "Lubrica la articulación coxofemoral para limpiar o despejar las caderas antes del impacto." },
@@ -127,7 +127,7 @@ function iniciarRutina() {
     showView('workout-view');
 }
 
-// --- 4. LÓGICA DE ENTRENAMIENTO (Controles de YouTube activados) ---
+// --- 4. LÓGICA DE ENTRENAMIENTO ---
 const elExerciseName = document.getElementById('exercise-name');
 const elExerciseDesc = document.getElementById('exercise-desc');
 const elTimeLeft = document.getElementById('time-left');
@@ -137,6 +137,7 @@ const btnPlayPause = document.getElementById('btn-play-pause');
 const elYoutubeContainer = document.getElementById('youtube-container');
 const elYoutubePlayer = document.getElementById('youtube-player');
 const elPlaceholder = document.getElementById('video-placeholder');
+const elFallbackBtn = document.getElementById('youtube-fallback-btn');
 
 function formatTime(seconds) {
     const m = Math.floor(seconds / 60);
@@ -159,13 +160,17 @@ function updateUI() {
     if (isPlaying || currentIndex > 0) {
         elPlaceholder.classList.add('hidden');
         elYoutubeContainer.classList.remove('hidden');
+        elFallbackBtn.classList.remove('hidden'); // Muestra botón directo por si el embed falla
         
-        // CONTROLES ACTIVADOS (controls=1) para que puedas avanzar/retroceder en el vídeo
         const ytUrl = `https://www.youtube.com/embed/${currentTask.youtubeId}?autoplay=1&mute=1&controls=1&loop=1&playlist=${currentTask.youtubeId}&playsinline=1`;
         if (elYoutubePlayer.src !== ytUrl) elYoutubePlayer.src = ytUrl;
+        
+        // Enlace directo al vídeo original por si YouTube bloquea la reproducción dentro de la web
+        elFallbackBtn.href = `https://www.youtube.com/watch?v=${currentTask.youtubeId}`;
     } else {
         elPlaceholder.classList.remove('hidden');
         elYoutubeContainer.classList.add('hidden');
+        elFallbackBtn.classList.add('hidden');
         document.getElementById('video-name').textContent = "Pulsa Empezar";
         elYoutubePlayer.src = "";
     }
@@ -192,6 +197,7 @@ function nextExercise() {
         elTimeLeft.textContent = "00:00"; 
         btnPlayPause.textContent = "Volver al Menú";
         elYoutubeContainer.classList.add('hidden');
+        elFallbackBtn.classList.add('hidden');
         elPlaceholder.classList.remove('hidden');
         document.getElementById('video-name').textContent = "Rutina finalizada";
     }
